@@ -7,12 +7,13 @@ import os
 def count_files(path):
     return sum([len(files) for r, d, files in os.walk(path)])
 
-num_classes = 4
-img_rows,img_cols = 48,48
-batch_size = 32
-
 train_data_dir = 'data/train'
 validation_data_dir = 'data/test'
+
+num_classes = len(os.listdir(train_data_dir))
+img_rows,img_cols = 48,48
+batch_size = 32
+epochs = 50
 
 train_datagen = ImageDataGenerator(
 					rescale=1./255,
@@ -134,16 +135,13 @@ callbacks = [earlystop,checkpoint,reduce_lr]
 
 model.compile(loss='categorical_crossentropy', optimizer=tf.keras.optimizers.Adam(learning_rate=0.001), metrics=['accuracy'])
 
-nb_train_samples = count_files(train_data_dir)
-nb_validation_samples = count_files(validation_data_dir)
-print(nb_train_samples)
-print(nb_validation_samples)
-epochs=1
+train_samples = count_files(train_data_dir)
+validation_samples = count_files(validation_data_dir)
 
 history=model.fit(
                 train_generator,
-                steps_per_epoch=nb_train_samples//batch_size,
+                steps_per_epoch=train_samples//batch_size,
                 epochs=epochs,
                 callbacks=callbacks,
                 validation_data=validation_generator,
-                validation_steps=nb_validation_samples//batch_size)
+                validation_steps=validation_samples//batch_size)
