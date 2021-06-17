@@ -5,5 +5,4 @@ data
 /.vs/ProjectSettings.json
 /.vs/EmotionRecognition/v16
 model.h5.bak
-trained_model.h5
 unused_data
